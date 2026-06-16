@@ -1,0 +1,1851 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gleb Arestov — Portfolio</title>
+  <style>
+    :root {
+      --bg: #f7f5ef;
+      --paper: #fffdf7;
+      --ink: #161616;
+      --muted: #6d6a61;
+      --hair: rgba(22,22,22,.09);
+      --hair-strong: rgba(22,22,22,.16);
+      --accent: #2458c6;
+      --accent-soft: rgba(36,88,198,.08);
+      --ok: #0d6b45;
+      --warn: #7a4a00;
+      --shadow: 0 16px 44px rgba(0,0,0,.14);
+      --radius: 16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: Georgia, "Times New Roman", serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, var(--bg), #f2efe7 82%);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.35;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(36,88,198,.48);
+      padding-bottom: 1px;
+    }
+    a:hover { border-bottom-color: var(--accent); }
+    button { font: inherit; color: inherit; }
+
+    .page {
+      width: min(1320px, calc(100vw - 40px));
+      margin: 0 auto;
+      padding: 22px 0 80px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(280px, 1.4fr) minmax(300px, 1fr);
+      gap: 24px;
+      align-items: start;
+      border-bottom: 1px solid var(--hair-strong);
+      padding-bottom: 18px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      font: 12px/1.1 var(--mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: clamp(36px, 5vw, 68px);
+      line-height: .9;
+      letter-spacing: -.045em;
+      margin: 0 0 10px;
+    }
+
+    .subhead {
+      max-width: 780px;
+      font-size: clamp(15px, 1.35vw, 19px);
+      line-height: 1.24;
+      color: #252525;
+    }
+
+    .subhead strong {
+      font-weight: 640;
+      background: linear-gradient(transparent 62%, rgba(36,88,198,.16) 62%);
+    }
+
+    .identity {
+      justify-self: end;
+      width: min(500px, 100%);
+      border-left: 0;
+      padding-left: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .identity-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 6px 12px;
+      margin-top: 12px;
+      font: 13px/1.25 var(--mono);
+    }
+
+    .identity-grid dt { color: #858177; }
+    .identity-grid dd { margin: 0; color: #222; }
+
+    .timeline {
+      margin: 22px 0 26px;
+      padding: 14px 0 12px;
+      border-top: 1px solid var(--hair);
+      border-bottom: 1px solid var(--hair);
+      overflow-x: auto;
+    }
+
+    .timeline-inner {
+      min-width: 1180px;
+      display: grid;
+      grid-template-columns: 92px repeat(10, minmax(148px, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .timeline-label {
+      font: 12px/1.2 var(--mono);
+      color: var(--muted);
+      padding-top: 8px;
+    }
+
+    .era {
+      border-left: 1px solid var(--hair);
+      padding: 6px 10px 8px;
+      min-height: 74px;
+    }
+
+    .era b {
+      display: block;
+      font: 13px/1.15 var(--mono);
+      margin-bottom: 6px;
+    }
+
+    .era span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      max-width: 24ch;
+    }
+
+    .timeline-links {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 7px;
+    }
+
+    .timeline-link,
+    .inline-project-link {
+      width: fit-content;
+      border: 0;
+      border-bottom: 1px dashed rgba(36,88,198,.48);
+      padding: 0 0 1px;
+      border-radius: 0;
+      background: transparent;
+      color: var(--accent);
+      cursor: pointer;
+      font: 12px/1.15 var(--mono);
+      text-align: left;
+    }
+
+    .timeline-link:hover,
+    .timeline-link:focus-visible,
+    .inline-project-link:hover,
+    .inline-project-link:focus-visible {
+      border-bottom-color: var(--accent);
+      outline: none;
+    }
+
+    td:first-child .inline-project-link {
+      font: inherit;
+      font-weight: 640;
+      color: var(--ink);
+      border-bottom-color: rgba(36,88,198,.34);
+    }
+
+    td:first-child .inline-project-link:hover,
+    td:first-child .inline-project-link:focus-visible {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .filters {
+      position: sticky;
+      top: 0;
+      z-index: 4;
+      background: rgba(247,245,239,.86);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--hair);
+      padding: 10px 0;
+      margin-bottom: 22px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-caption {
+      font: 12px/1 var(--mono);
+      color: var(--muted);
+      margin-right: 4px;
+    }
+
+    .chip {
+      border: 1px solid var(--hair-strong);
+      background: var(--paper);
+      border-radius: 999px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: border-color .16s ease, transform .16s ease, background .16s ease;
+    }
+
+    .chip:hover { border-color: rgba(36,88,198,.30); }
+    .chip.active {
+      color: var(--accent);
+      border-color: rgba(36,88,198,.42);
+      background: var(--accent-soft);
+    }
+
+    .lane {
+      margin: 32px 0 42px;
+    }
+
+    .lane-head {
+      display: grid;
+      grid-template-columns: 190px 1fr auto;
+      gap: 18px;
+      align-items: baseline;
+      border-top: 1px solid var(--hair-strong);
+      padding-top: 13px;
+      margin-bottom: 14px;
+    }
+
+    .lane-year {
+      font: 13px/1.1 var(--mono);
+      color: var(--muted);
+    }
+
+    .lane-title {
+      font-family: var(--serif);
+      font-size: clamp(24px, 3vw, 40px);
+      letter-spacing: -.025em;
+    }
+
+    .lane-note {
+      max-width: 520px;
+      justify-self: end;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: right;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      grid-column: span 3;
+      min-width: 0;
+      position: relative;
+      border: 1px solid var(--hair);
+      background: rgba(255,253,247,.72);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: none;
+      transition: border-color .16s ease, opacity .16s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card.featured { grid-column: span 6; }
+    .card.medium { grid-column: span 4; }
+
+    .card:hover, .card:focus-within {
+      border-color: rgba(36,88,198,.34);
+    }
+
+    .card.hidden { display: none; }
+
+    .media {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: rgba(22,22,22,.035);
+      border-bottom: 1px solid var(--hair);
+      overflow: hidden;
+    }
+
+    .media::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 30%;
+      background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.18));
+      pointer-events: none;
+    }
+
+    .preview-gif,
+    .preview-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(.92) contrast(.98);
+    }
+
+    .preview-gif {
+      opacity: 1;
+      transition: opacity .18s ease;
+    }
+
+    .preview-gif.broken { display: none; }
+
+    .preview-video {
+      opacity: 0;
+      transition: opacity .2s ease;
+    }
+
+    .card:hover .preview-gif,
+    .card.video-ready .preview-video.playing + .preview-gif {
+      opacity: 0;
+    }
+
+    .card:hover .preview-video,
+    .card.video-ready .preview-video.playing {
+      opacity: 1;
+    }
+
+    .still {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      text-align: center;
+      color: rgba(22,22,22,.78);
+      transition: opacity .2s ease;
+    }
+
+    .card.has-gif .still { display: none; }
+    .card:hover .still { opacity: .18; }
+
+    .still-title {
+      font-family: var(--serif);
+      font-size: clamp(24px, 3vw, 44px);
+      letter-spacing: -.04em;
+      line-height: .95;
+    }
+
+    .media-badges {
+      position: absolute;
+      z-index: 2;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: end;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 5px;
+      align-items: center;
+      max-width: 100%;
+      border: 1px solid rgba(255,255,255,.28);
+      background: rgba(0,0,0,.48);
+      color: white;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font: 11px/1 var(--mono);
+      white-space: nowrap;
+    }
+
+    .badge.light {
+      margin-left: auto;
+      background: rgba(255,253,247,.78);
+      color: #111;
+      border-color: rgba(22,22,22,.16);
+    }
+
+    .card-body {
+      padding: 13px 14px 14px;
+      display: grid;
+      grid-template-rows: auto auto minmax(58px, auto) 1fr auto auto;
+      flex: 1;
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font: 12px/1.2 var(--mono);
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .title-row {
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 7px;
+    }
+
+    .project-title {
+      font-weight: 680;
+      font-size: 17px;
+      line-height: 1.1;
+      letter-spacing: -.015em;
+    }
+
+    .project-badge {
+      color: var(--ok);
+      font: 12px/1 var(--mono);
+      white-space: nowrap;
+    }
+
+    .desc {
+      color: #34322d;
+      font-size: 14px;
+      max-width: 62ch;
+    }
+
+    .tags {
+      margin-top: 11px;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      border: 1px solid rgba(22,22,22,.12);
+      background: rgba(22,22,22,.035);
+      border-radius: 6px;
+      padding: 3px 6px;
+      font: 11px/1.1 var(--mono);
+      color: #3c3932;
+    }
+
+    .tag.role-scope {
+      border-color: rgba(36,88,198,.25);
+      background: rgba(36,88,198,.08);
+      color: var(--accent);
+    }
+
+    .open-btn {
+      margin-top: 12px;
+      width: 100%;
+      border: 1px solid var(--hair);
+      border-radius: 10px;
+      background: #fff;
+      padding: 8px 10px;
+      font: 12px/1 var(--mono);
+      cursor: pointer;
+      color: #2b2b2b;
+    }
+
+    .open-btn:hover { border-color: rgba(36,88,198,.42); color: var(--accent); }
+
+    .matrix {
+      margin: 34px 0 18px;
+      border-top: 1px solid var(--hair-strong);
+      padding-top: 18px;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 20px;
+    }
+
+    .matrix h2 {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 31px;
+      line-height: .95;
+      letter-spacing: -.03em;
+      margin: 0;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background: rgba(255,253,247,.55);
+      font-size: 13px;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--hair);
+      padding: 8px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      font: 11px/1.1 var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    td:first-child { font-weight: 640; }
+    .dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+      background: var(--accent);
+      opacity: .86;
+    }
+    .dot.empty {
+      background: transparent;
+      border: 1px solid var(--hair-strong);
+    }
+
+    .case-popover {
+      position: absolute;
+      z-index: 20;
+      width: min(1180px, calc(100vw - 28px));
+      background: var(--paper);
+      color: var(--ink);
+      border: 1px solid var(--hair-strong);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .case-popover.hidden {
+      display: none;
+    }
+
+    .modal {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(320px, .8fr);
+      min-height: 620px;
+    }
+
+    .modal-media {
+      background: #0e0e0e;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: stretch;
+      justify-content: flex-start;
+      padding: 18px;
+      border-radius: 22px 0 0 22px;
+      overflow: auto;
+      max-height: 86vh;
+    }
+
+    .modal-media video {
+      width: 100%;
+      max-height: 72vh;
+      border-radius: 12px;
+      background: #000;
+      box-shadow: 0 18px 60px rgba(0,0,0,.36);
+    }
+
+    .video-stack-label {
+      color: rgba(255,255,255,.72);
+      font: 12px/1 var(--mono);
+      margin: 0 0 -4px;
+    }
+
+    .modal-fallback {
+      width: 100%;
+      min-height: 420px;
+      display: grid;
+      place-items: center;
+      color: rgba(255,255,255,.74);
+      text-align: center;
+      padding: 30px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 12px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+    }
+
+    .modal-copy {
+      padding: 22px 24px;
+      overflow: auto;
+      max-height: 86vh;
+    }
+
+    .close {
+      float: right;
+      border: 1px solid var(--hair);
+      background: #fff;
+      border-radius: 999px;
+      padding: 7px 10px;
+      cursor: pointer;
+      font: 12px/1 var(--mono);
+    }
+
+    .modal-copy h2 {
+      font-family: var(--serif);
+      font-size: 42px;
+      line-height: .92;
+      letter-spacing: -.04em;
+      font-weight: 500;
+      margin: 30px 0 10px;
+    }
+
+    .modal-meta {
+      font: 12px/1.4 var(--mono);
+      color: var(--muted);
+      border-bottom: 1px solid var(--hair);
+      padding-bottom: 13px;
+      margin-bottom: 16px;
+    }
+
+    .modal-section {
+      margin: 18px 0;
+    }
+
+    .modal-section h3 {
+      margin: 0 0 8px;
+      font: 12px/1 var(--mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .modal-section ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .modal-section li { margin: 4px 0; }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-top: 10px;
+      font: 13px/1.2 var(--mono);
+      overflow-wrap: anywhere;
+    }
+
+    .legend {
+      margin: 26px 0 0;
+      padding-top: 14px;
+      border-top: 1px solid var(--hair);
+      color: var(--muted);
+      font-size: 13px;
+      max-width: 980px;
+    }
+
+    @media (max-width: 1100px) {
+      .card, .card.medium { grid-column: span 6; }
+      .card.featured { grid-column: span 12; }
+      .topbar { grid-template-columns: 1fr; }
+      .identity { justify-self: stretch; border-left: none; padding-left: 0; border-top: 1px solid var(--hair); padding-top: 16px; }
+      .lane-head { grid-template-columns: 1fr; gap: 5px; }
+      .lane-note { justify-self: start; text-align: left; }
+      .matrix { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      .page { width: min(100vw - 24px, 680px); padding-top: 18px; }
+      .grid { grid-template-columns: 1fr; }
+      .card, .card.medium, .card.featured { grid-column: 1; }
+      .modal { grid-template-columns: 1fr; }
+      .modal-media { border-radius: 22px 22px 0 0; }
+      .modal-copy { max-height: unset; }
+      .case-popover { max-height: none; overflow: visible; }
+      .filters { position: static; }
+      .desc { min-height: unset; }
+      .matrix { overflow-x: auto; }
+      table { min-width: 780px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="topbar">
+      <div>
+        <div class="eyebrow">Frontend · browser runtime · complex UI systems</div>
+        <h1>Gleb Arestov</h1>
+        <div class="subhead">
+          15+ years building frontend, browser, desktop, and interactive systems. First engineer at Sidekick Browser, later acquired by Perplexity.
+        </div>
+      </div>
+      <aside class="identity">
+        <dl class="identity-grid">
+          <dt>Name</dt><dd>Gleb Arestov</dd>
+          <dt>Focus</dt><dd>Frontend · Browser runtime · Electron · Interactive systems</dd>
+          <dt>Location</dt><dd>Batumi, Georgia · UTC+4</dd>
+          <dt>Experience</dt><dd>15+ years · First engineer · Browser/runtime systems · Live prototypes</dd>
+        </dl>
+      </aside>
+    </section>
+
+    <section class="timeline" aria-label="Portfolio timeline">
+      <div class="timeline-inner">
+        <div class="era"><b>Mar 2026 - Present</b><span>Independent R&amp;D</span><div class="timeline-links"><button class="timeline-link" data-project="Minicut Video Editor">Minicut</button><button class="timeline-link" data-project="Weather App / DKT Runtime">Weather</button><button class="timeline-link" data-project="DKT Meta Graph Visualization">DKT graph</button><button class="timeline-link" data-project="Linkkraft R&D / Browser + Trails">Linkkraft R&amp;D</button><button class="timeline-link" data-project="Canvas Browser Prototype">Canvas browser</button><button class="timeline-link" data-project="Ambition Prototype">Ambition</button></div></div>
+        <div class="era"><b>Dec 2023 - Feb 2026</b><span>career break / non-IT work &amp; personal programming</span></div>
+        <div class="era"><b>Nov 2023</b><span>contract prototype</span><div class="timeline-links"><button class="timeline-link" data-project="ML Editor on VS Code Fork">ML editor</button></div></div>
+        <div class="era"><b>Mar 2022 - Oct 2023</b><span>career break</span></div>
+        <div class="era"><b>Nov 2021 - Feb 2022</b><span>original Linkkraft product phase</span><div class="timeline-links"><button class="timeline-link" data-project="Linkkraft — Offline-first Browser">Linkkraft</button></div></div>
+        <div class="era"><b>May 2019 - Oct 2021</b><span>production browser</span><div class="timeline-links"><button class="timeline-link" data-project="Sidekick Browser">Sidekick Browser</button></div></div>
+        <div class="era"><b>2018</b><span>video workflow product</span><div class="timeline-links"><button class="timeline-link" data-project="Motion Tailor Frontend">Motion Tailor</button></div></div>
+        <div class="era"><b>2016 - 2018</b><span>logistics product UI</span><div class="timeline-links"><button class="timeline-link" data-project="Trucker Path Truckloads UI">Trucker Path</button></div></div>
+        <div class="era"><b>2013</b><span>geographic data visualization</span><div class="timeline-links"><button class="timeline-link" data-project="Moscow Marathon Visualization">Moscow Marathon</button></div></div>
+        <div class="era"><b>2009 - 2015</b><span>music UI / interaction work</span><div class="timeline-links"><button class="timeline-link" data-project="Seesu Music Zoom UI">Seesu Music</button></div></div>
+      </div>
+    </section>
+
+    <nav class="filters" aria-label="Filters">
+      <span class="filter-caption">filter</span>
+      <button class="chip active" data-filter="all">All</button>
+      <button class="chip" data-filter="primary">Primary build scope</button>
+      <button class="chip" data-filter="browser">Browser runtime</button>
+      <button class="chip" data-filter="interface">Interface implementation</button>
+      <button class="chip" data-filter="sync">Local-first / sync</button>
+      <button class="chip" data-filter="production">Production</button>
+      <button class="chip" data-filter="oss">OSS / infra</button>
+    </nav>
+
+    <div id="lanes"></div>
+
+    <section class="matrix">
+      <h2>Projects × evidence</h2>
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th>Interface implementation</th>
+              <th>Primary build scope</th>
+              <th>Runtime / browser depth</th>
+              <th>Sync / local-first</th>
+              <th>Production / public artifact</th>
+              <th>Freshness</th>
+            </tr>
+          </thead>
+          <tbody id="capabilityMatrix"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="casePopover" class="case-popover hidden" role="dialog" aria-modal="false" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-media" id="modalMedia"></div>
+      <div class="modal-copy">
+        <button class="close" id="closeDialog">close</button>
+        <h2 id="modalTitle"></h2>
+        <div class="modal-meta" id="modalMeta"></div>
+
+        <section class="modal-section">
+          <h3>Evidence</h3>
+          <ul id="modalFacts"></ul>
+        </section>
+
+        <section class="modal-section">
+          <h3>Scope</h3>
+          <ul id="modalScope"></ul>
+        </section>
+
+        <section class="modal-section">
+          <h3>Technical surface</h3>
+          <div class="tags" id="modalTags"></div>
+        </section>
+
+        <section class="modal-section">
+          <h3>Links</h3>
+          <div class="links" id="modalLinks"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const projects = [
+      {
+            "lane": "Mar 2026 - Present — Independent R&D",
+            "title": "Minicut Video Editor",
+            "year": "2026",
+            "role": "Solo builder",
+            "size": "featured",
+            "badge": "Browser video editor",
+            "tags": [
+                  "primary",
+                  "interface",
+                  "sync",
+                  "browser"
+            ],
+            "tech": [
+                  "React",
+                  "DKT",
+                  "WebRTC",
+                  "CRDT",
+                  "WebCodecs",
+                  "browser rendering",
+                  "FFprobe",
+                  "Playwright",
+                  "local-first"
+            ],
+            "desc": "Local-first collaborative browser video editor with timeline UI, replicated state, browser rendering and output validation.",
+            "preview": "https://arestov.github.io/linkkraft-notes/cv-media/minicut-video-editor-p2p.mp4",
+            "links": [
+                  [
+                        "Live demo",
+                        "https://minicut-video-editor.pages.dev/"
+                  ],
+                  [
+                        "P2P video",
+                        "https://arestov.github.io/linkkraft-notes/cv-media/minicut-video-editor-p2p.mp4"
+                  ],
+                  [
+                        "GitHub",
+                        "https://github.com/arestov/minicut"
+                  ]
+            ],
+            "facts": [
+                  "Built a timeline-based browser video editor UI.",
+                  "Implemented local-first collaboration with WebRTC sync and CRDT state.",
+                  "Added browser-based rendering pipeline with FFprobe-based output validation."
+            ],
+            "scope": [
+                  "Solo prototype build: product concept, interaction model and implementation.",
+                  "Frontend architecture and DKT runtime integration.",
+                  "Replication/sync layer and rendering validation implementation."
+            ],
+            "score": [
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  "2026"
+            ]
+      },
+      {
+            "lane": "Mar 2026 - Present — Independent R&D",
+            "title": "Weather App / DKT Runtime",
+            "year": "2026",
+            "role": "Solo builder",
+            "size": "medium",
+            "badge": "Replicated state across tabs/devices",
+            "tags": [
+                  "primary",
+                  "interface",
+                  "sync",
+                  "browser"
+            ],
+            "tech": [
+                  "React",
+                  "DKT",
+                  "WebRTC",
+                  "Playwright",
+                  "Worker",
+                  "OffscreenCanvas",
+                  "Lottie"
+            ],
+            "desc": "Weather UI used as a live playground for replicated state across tabs/devices, workers and animated rendering.",
+            "preview": "https://arestov.github.io/linkkraft-notes/cv-media/weather-mini-app.mp4",
+            "links": [
+                  [
+                        "Live demo",
+                        "https://weather-app-root.pages.dev/"
+                  ],
+                  [
+                        "Video",
+                        "https://arestov.github.io/linkkraft-notes/cv-media/weather-mini-app.mp4"
+                  ]
+            ],
+            "facts": [
+                  "Built React weather UI using DKT runtime.",
+                  "Replicated state across tabs and devices via WebRTC.",
+                  "Used Worker / OffscreenCanvas boundary for animated rendering."
+            ],
+            "scope": [
+                  "Solo prototype build: state model and replication implementation.",
+                  "UI implementation and animation pipeline.",
+                  "Worker boundary and rendering integration."
+            ],
+            "score": [
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  "2026"
+            ]
+      },
+      {
+            "lane": "Mar 2026 - Present — Independent R&D",
+            "title": "DKT Meta Graph Visualization",
+            "year": "2026",
+            "role": "Solo builder",
+            "size": "medium",
+            "badge": "Runtime/code graph viewer",
+            "tags": [
+                  "primary",
+                  "interface",
+                  "browser"
+            ],
+            "tech": [
+                  "Svelte",
+                  "xyflow",
+                  "DKT",
+                  "graph visualization",
+                  "runtime introspection"
+            ],
+            "desc": "Interactive graph viewer for code/runtime relationships.",
+            "preview": "https://arestov.github.io/linkkraft-notes/cv-media/linkkraft-dkt-meta-graph-xyflow.mp4",
+            "links": [
+                  [
+                        "Live demo",
+                        "https://minicut-video-editor.pages.dev/structure-graph-viewer/"
+                  ],
+                  [
+                        "Video",
+                        "https://arestov.github.io/linkkraft-notes/cv-media/linkkraft-dkt-meta-graph-xyflow.mp4"
+                  ]
+            ],
+            "facts": [
+                  "Built an interactive graph viewer for code/runtime relationships.",
+                  "Used Svelte and xyflow for node-based graph UI.",
+                  "Applied DKT/runtime metadata to inspect structural relationships."
+            ],
+            "scope": [
+                  "Solo prototype build: graph model and visual layout implementation.",
+                  "Svelte/xyflow implementation.",
+                  "Runtime relationship representation."
+            ],
+            "score": [
+                  1,
+                  1,
+                  1,
+                  0,
+                  1,
+                  "2026"
+            ]
+      },
+      {
+            "lane": "Mar 2026 - Present — Independent R&D",
+            "title": "Linkkraft R&D / Browser + Trails",
+            "year": "2026",
+            "role": "Solo builder",
+            "size": "featured",
+            "badge": "2026 Linkkraft-derived prototype",
+            "tags": [
+                  "primary",
+                  "interface",
+                  "browser"
+            ],
+            "tech": [
+                  "Electron",
+                  "WebContentsView",
+                  "BrowserView",
+                  "Chrome DevTools Protocol",
+                  "DOM snapshots",
+                  "Svelte",
+                  "xyflow",
+                  "DKT"
+            ],
+            "desc": "2026 Linkkraft-derived Electron browser prototype with trails visualization, DOM snapshots and graph-like navigation. Separate from the original 2021-2022 Linkkraft product phase.",
+            "preview": "https://arestov.github.io/linkkraft-notes/trails-tree-plus-offline-for-tool-for-thoughts/linkkraft-fresh-offline-spa.mp4",
+            "videos": [
+                  [
+                        "Browser / trails",
+                        "https://arestov.github.io/linkkraft-notes/trails-tree-plus-offline-for-tool-for-thoughts/linkkraft-fresh-offline-spa.mp4"
+                  ],
+                  [
+                        "DKT meta graph / xyflow",
+                        "https://arestov.github.io/linkkraft-notes/cv-media/linkkraft-dkt-meta-graph-xyflow.mp4"
+                  ]
+            ],
+            "links": [
+                  [
+                        "Website",
+                        "https://linkkraft.com/"
+                  ],
+                  [
+                        "Trails / offline SPA video",
+                        "https://arestov.github.io/linkkraft-notes/trails-tree-plus-offline-for-tool-for-thoughts/linkkraft-fresh-offline-spa.mp4"
+                  ],
+                  [
+                        "DKT meta graph / xyflow video",
+                        "https://arestov.github.io/linkkraft-notes/cv-media/linkkraft-dkt-meta-graph-xyflow.mp4"
+                  ]
+            ],
+            "facts": [
+                  "Built 2026 Linkkraft-derived Electron browser prototype with WebContentsView / BrowserView integration.",
+                  "Implemented DOM snapshot flow for saved page states.",
+                  "Built graph-like trails navigation with Svelte, xyflow and DKT."
+            ],
+            "scope": [
+                  "Solo prototype build: Electron/browser-view integration.",
+                  "Trail visualization and graph UI implementation.",
+                  "DOM snapshot flow and browser-view integration."
+            ],
+            "score": [
+                  1,
+                  1,
+                  1,
+                  0,
+                  1,
+                  "2026"
+            ]
+      },
+      {
+            "lane": "Mar 2026 - Present — Independent R&D",
+            "title": "Canvas Browser Prototype",
+            "year": "2026",
+            "role": "Solo builder",
+            "size": "medium",
+            "badge": "WebGPU shared texture",
+            "tags": [
+                  "primary",
+                  "interface",
+                  "browser"
+            ],
+            "tech": [
+                  "Electron",
+                  "WebGPU",
+                  "shared texture",
+                  "canvas UI"
+            ],
+            "desc": "Experiment around browser surfaces, canvas rendering and shared texture ideas for high-performance UI.",
+            "preview": "https://arestov.github.io/linkkraft-notes/cv-media/canvas-browser-prototype.mp4",
+            "links": [
+                  [
+                        "Video",
+                        "https://arestov.github.io/linkkraft-notes/cv-media/canvas-browser-prototype.mp4"
+                  ]
+            ],
+            "facts": [
+                  "Built Electron prototype around browser surfaces and canvas UI.",
+                  "Explored WebGPU shared texture rendering path.",
+                  "Tested interaction model for GPU-oriented browser UI."
+            ],
+            "scope": [
+                  "Solo prototype build: rendering experiment and UI interaction.",
+                  "Browser/canvas integration work.",
+                  "Shared-texture rendering exploration."
+            ],
+            "score": [
+                  1,
+                  1,
+                  1,
+                  0,
+                  1,
+                  "2026"
+            ]
+      },
+      {
+            "lane": "Mar 2026 - Present — Independent R&D",
+            "title": "Ambition Prototype",
+            "year": "2026",
+            "role": "Solo builder",
+            "size": "medium",
+            "badge": "Workflow orchestration",
+            "tags": [
+                  "primary",
+                  "interface",
+                  "browser"
+            ],
+            "tech": [
+                  "Electron",
+                  "DKT",
+                  "Svelte",
+                  "agent orchestration",
+                  "workflow UI",
+                  "desktop prototype"
+            ],
+            "desc": "Electron prototype for AI workflow orchestration UI.",
+            "preview": "https://arestov.github.io/linkkraft-notes/cv-media/ambition-prototype.mp4",
+            "links": [
+                  [
+                        "Video",
+                        "https://arestov.github.io/linkkraft-notes/cv-media/ambition-prototype.mp4"
+                  ]
+            ],
+            "facts": [
+                  "Built Electron desktop prototype for AI workflow orchestration.",
+                  "Used DKT for state/runtime coordination.",
+                  "Implemented Svelte-based workflow UI."
+            ],
+            "scope": [
+                  "Solo prototype build: UI and workflow model implementation.",
+                  "State/runtime integration with DKT.",
+                  "Electron/Svelte desktop prototype implementation."
+            ],
+            "score": [
+                  1,
+                  1,
+                  1,
+                  0,
+                  1,
+                  "2026"
+            ]
+      },
+      {
+            "lane": "Nov 2023 — Contract Prototype",
+            "title": "ML Editor on VS Code Fork",
+            "year": "Nov 2023",
+            "role": "Contract Engineer",
+            "size": "medium",
+            "badge": "VS Code fork prototype",
+            "tags": [
+                  "interface",
+                  "browser",
+                  "primary"
+            ],
+            "tech": [
+                  "VS Code fork",
+                  "Electron-based editor",
+                  "editor UI",
+                  "data/ML workflow",
+                  "prototype"
+            ],
+            "desc": "One-month contract prototype for a data/ML editor built on top of a VS Code fork.",
+            "preview": "https://arestov.github.io/linkkraft-notes/cv-media/atad-ml%20vscode%20fork.mov",
+            "links": [
+                  [
+                        "Video",
+                        "https://arestov.github.io/linkkraft-notes/cv-media/atad-ml%20vscode%20fork.mov"
+                  ]
+            ],
+            "facts": [
+                  "Completed one-month contract prototype on top of a VS Code fork.",
+                  "Adapted existing editor UI surface for a data/ML workflow.",
+                  "Produced demo prototype for investor pitching."
+            ],
+            "scope": [
+                  "Contract prototype implementation.",
+                  "Workflow and interaction exploration on top of an existing editor platform.",
+                  "Editor/platform integration."
+            ],
+            "score": [
+                  1,
+                  1,
+                  1,
+                  0,
+                  1,
+                  "Nov 2023"
+            ]
+      },
+      {
+            "lane": "Nov 2021 - Feb 2022 — Linkkraft / Offline-first Browser",
+            "title": "Linkkraft — Offline-first Browser",
+            "year": "Nov 2021 - Feb 2022",
+            "role": "Founder / Principal Engineer",
+            "size": "featured",
+            "badge": "Historical product phase",
+            "tags": [
+                  "primary",
+                  "interface",
+                  "browser"
+            ],
+            "tech": [
+                  "Electron",
+                  "Chrome DevTools Protocol",
+                  "DOM snapshots",
+                  "LevelDB",
+                  "Canvas",
+                  "DKT",
+                  "offline replay"
+            ],
+            "desc": "Original 2021-2022 Linkkraft product phase: offline-first Electron browser and knowledge tool for saving, organizing and reopening web content through page snapshots and history-tree navigation.",
+            "preview": "https://arestov.github.io/linkkraft-notes/trails-tree-plus-offline-for-tool-for-thoughts/linkkraft-fresh-offline-spa.mp4",
+            "links": [
+                  [
+                        "Website",
+                        "https://linkkraft.com/"
+                  ],
+                  [
+                        "Browser / trails video",
+                        "https://arestov.github.io/linkkraft-notes/trails-tree-plus-offline-for-tool-for-thoughts/linkkraft-fresh-offline-spa.mp4"
+                  ]
+            ],
+            "facts": [
+                  "Built the original offline-first Electron browser and knowledge tool during the 2021-2022 product phase.",
+                  "Implemented DOM snapshotting, resource capture, sanitization, caching and offline replay.",
+                  "Used Electron APIs and Chrome DevTools Protocol to capture page resources, styles, images, fonts and current DOM state.",
+                  "Built canvas-based tree/trails visualization for saved browsing history.",
+                  "Used DKT for derived state, dependency tracking, persistence, hydration, serialization and selective loading/unloading of local datasets."
+            ],
+            "scope": [
+                  "Founder / principal engineer for the original product phase.",
+                  "Application architecture and implementation.",
+                  "Browser snapshot and offline replay pipeline.",
+                  "Visualization, persistence and runtime model."
+            ],
+            "score": [
+                  1,
+                  1,
+                  1,
+                  0,
+                  1,
+                  "Nov 2021 - Feb 2022"
+            ]
+      },
+      {
+            "lane": "May 2019 - Oct 2021 — Sidekick Browser / Production Browser",
+            "title": "Sidekick Browser",
+            "year": "May 2019 - Oct 2021",
+            "role": "First Engineer / Frontend & Browser Architecture",
+            "size": "featured",
+            "badge": "First engineer · production browser",
+            "tags": [
+                  "primary",
+                  "interface",
+                  "browser",
+                  "production"
+            ],
+            "tech": [
+                  "Electron",
+                  "Chrome Extension",
+                  "Chromium WebUI",
+                  "search",
+                  "keyboard nav",
+                  "performance",
+                  "memory profiling"
+            ],
+            "desc": "First engineer at Sidekick Browser. Was responsible for Electron architecture and later Chrome Extension / Chromium frontend work; not a visual/product design role.",
+            "preview": "https://arestov.github.io/linkkraft-notes/cv-media/Sidekick%20Search.mp4",
+            "videos": [
+                  [
+                        "Search / keyboard UI",
+                        "https://arestov.github.io/linkkraft-notes/cv-media/Sidekick%20Search.mp4"
+                  ],
+                  [
+                        "DKT replication",
+                        "https://arestov.github.io/linkkraft-notes/cv-media/dkt%20replication%20in%20Sidekick.mp4"
+                  ]
+            ],
+            "links": [
+                  [
+                        "Sidekick Search video",
+                        "https://arestov.github.io/linkkraft-notes/cv-media/Sidekick%20Search.mp4"
+                  ],
+                  [
+                        "DKT replication in Sidekick video",
+                        "https://arestov.github.io/linkkraft-notes/cv-media/dkt%20replication%20in%20Sidekick.mp4"
+                  ],
+                  [
+                        "Perplexity Comet",
+                        "https://www.perplexity.ai/comet"
+                  ]
+            ],
+            "facts": [
+                  "Joined Sidekick Browser as the first engineer.",
+                  "Was responsible for Electron architecture and later Chrome Extension / Chromium frontend work.",
+                  "Implemented browser UI surfaces such as search, keyboard navigation and sidebar/WebUI pieces.",
+                  "Built automation and performance tooling.",
+                  "Sidekick was later acquired by Perplexity."
+            ],
+            "scope": [
+                  "First engineer scope across frontend/browser architecture and implementation.",
+                  "Browser-runtime UI: search, navigation, sidebar/WebUI pieces.",
+                  "Performance/memory tooling and automation."
+            ],
+            "score": [
+                  1,
+                  1,
+                  1,
+                  0,
+                  1,
+                  "May 2019 - Oct 2021"
+            ]
+      },
+      {
+            "lane": "2018 — Motion Tailor / Video Production UI",
+            "title": "Motion Tailor Frontend",
+            "year": "Jan 2018 - Nov 2018",
+            "role": "Lead Frontend / Node.js Developer",
+            "size": "medium",
+            "badge": "Frontend implementation from scratch",
+            "tags": [
+                  "primary",
+                  "interface",
+                  "production"
+            ],
+            "tech": [
+                  "React",
+                  "Redux",
+                  "Node.js",
+                  "PostgreSQL",
+                  "Docker",
+                  "WebDriver",
+                  "product workflow"
+            ],
+            "desc": "React/Redux frontend implementation from scratch for a cloud platform for customized video production workflows. Not a visual design ownership role.",
+            "preview": "https://arestov.github.io/linkkraft-notes/cv-media/MotionTailor%20UI.mp4",
+            "links": [
+                  [
+                        "Motion Tailor",
+                        "https://www.motiontailor.com/"
+                  ],
+                  [
+                        "Video",
+                        "https://arestov.github.io/linkkraft-notes/cv-media/MotionTailor%20UI.mp4"
+                  ]
+            ],
+            "facts": [
+                  "Built React/Redux frontend from scratch for customized video production workflows.",
+                  "Implemented workflow-oriented screens and interaction behavior from product/design direction.",
+                  "Built browser-based QA automation with WebDriver, screenshots, Docker and CI."
+            ],
+            "scope": [
+                  "Frontend implementation from scratch.",
+                  "Workflow screen and interaction implementation.",
+                  "QA automation around browser workflows."
+            ],
+            "score": [
+                  1,
+                  1,
+                  0,
+                  0,
+                  1,
+                  "2018"
+            ]
+      },
+      {
+            "lane": "2016 - 2018 — Trucker Path / Logistics Product UI",
+            "title": "Trucker Path Truckloads UI",
+            "year": "Feb 2016 - Jan 2018",
+            "role": "Senior Frontend Developer",
+            "size": "medium",
+            "badge": "Feature implementation in existing product",
+            "tags": [
+                  "interface",
+                  "production"
+            ],
+            "tech": [
+                  "React",
+                  "Redux",
+                  "Clojure",
+                  "PostgreSQL",
+                  "MongoDB",
+                  "logistics UI",
+                  "data-heavy screens"
+            ],
+            "desc": "React/Redux frontend feature work for truckloads and shipping workflows in an existing logistics product. Not a design ownership or from-scratch role.",
+            "preview": "https://arestov.github.io/linkkraft-notes/cv-media/Truckerpath%20Truckloads%20UI.mp4",
+            "links": [
+                  [
+                        "Trucker Path",
+                        "https://truckerpath.com/"
+                  ],
+                  [
+                        "Video",
+                        "https://arestov.github.io/linkkraft-notes/cv-media/Truckerpath%20Truckloads%20UI.mp4"
+                  ]
+            ],
+            "facts": [
+                  "Implemented React/Redux frontend features for truckloads and shipping workflows in an existing product.",
+                  "Worked on data-heavy logistics screens and workflow behavior.",
+                  "Worked on UX, A/B tests, monetization research and product-facing frontend features."
+            ],
+            "scope": [
+                  "Frontend feature implementation in an existing product.",
+                  "Interaction and screen behavior.",
+                  "Product workflow details."
+            ],
+            "score": [
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  "2016 - 2018"
+            ]
+      },
+      {
+            "lane": "2013 — Moscow Marathon / Data Visualization",
+            "title": "Moscow Marathon Visualization",
+            "year": "2013",
+            "role": "Solo builder",
+            "size": "featured",
+            "badge": "Geographic SVG animation",
+            "tags": [
+                  "primary",
+                  "interface"
+            ],
+            "tech": [
+                  "SVG",
+                  "DOM",
+                  "D3 exploration",
+                  "geo path",
+                  "time-series"
+            ],
+            "desc": "Custom SVG/DOM data visualization: runners distributed along a geographic route over time.",
+            "preview": "https://arestov.github.io/linkkraft-notes/cv-media/Moscow%20Marathon%20Visualization.mp4",
+            "links": [
+                  [
+                        "Live demo",
+                        "https://arestov.github.io/moscow-marathon-2013/"
+                  ],
+                  [
+                        "Video",
+                        "https://arestov.github.io/linkkraft-notes/cv-media/Moscow%20Marathon%20Visualization.mp4"
+                  ]
+            ],
+            "facts": [
+                  "Animated runner density along a geographic SVG route over time.",
+                  "Mapped time-series data onto a route path.",
+                  "Built custom SVG/DOM renderer for the final visualization."
+            ],
+            "scope": [
+                  "Visualization concept and implementation.",
+                  "SVG/DOM renderer.",
+                  "Data-to-path mapping and animation behavior."
+            ],
+            "score": [
+                  1,
+                  1,
+                  0,
+                  0,
+                  1,
+                  "2013"
+            ]
+      },
+      {
+            "lane": "2009 - 2015 — Seesu Music / Interaction Work",
+            "title": "Seesu Music Zoom UI",
+            "year": "2009 - 2015",
+            "role": "Solo builder",
+            "size": "medium",
+            "badge": "Spatial zoom UI",
+            "tags": [
+                  "primary",
+                  "interface",
+                  "production"
+            ],
+            "tech": [
+                  "spatial navigation",
+                  "animation",
+                  "music UI",
+                  "Chrome Apps"
+            ],
+            "desc": "Spatial zoom-in navigation for a music UI; early work of interaction design and motion systems.",
+            "preview": "https://arestov.github.io/linkkraft-notes/cv-media/Seesu%20Music%20Zoom%20UI.mp4",
+            "links": [
+                  [
+                        "Video",
+                        "https://arestov.github.io/linkkraft-notes/cv-media/Seesu%20Music%20Zoom%20UI.mp4"
+                  ]
+            ],
+            "facts": [
+                  "Built spatial zoom navigation for a browser-based music UI.",
+                  "Implemented animated transitions and popup UI behavior.",
+                  "Combined music discovery flows with dense interactive navigation."
+            ],
+            "scope": [
+                  "Interaction concept and implementation.",
+                  "UI implementation and transitions.",
+                  "Product design direction."
+            ],
+            "score": [
+                  1,
+                  1,
+                  0,
+                  0,
+                  1,
+                  "2009 - 2015"
+            ]
+      },
+      {
+            "lane": "Cross-period — OSS / Performance / Infrastructure",
+            "title": "Memory Profiling Babel Plugin",
+            "year": "OSS / Tooling",
+            "role": "Solo builder",
+            "size": "medium",
+            "badge": "Memory instrumentation",
+            "tags": [
+                  "primary",
+                  "browser",
+                  "oss"
+            ],
+            "tech": [
+                  "Babel",
+                  "memory profiling",
+                  "instrumentation",
+                  "JavaScript"
+            ],
+            "desc": "Custom Babel plugin for profiling memory consumers; work of debugging and instrumentation depth.",
+            "preview": "",
+            "links": [
+                  [
+                        "GitHub",
+                        "https://github.com/arestov/babel-plugin-memory-consumers-slicer"
+                  ]
+            ],
+            "facts": [
+                  "Built Babel plugin for profiling memory consumers in JavaScript applications.",
+                  "Instrumented allocation points to make heap snapshots easier to interpret.",
+                  "Used custom tooling for browser/Electron memory debugging workflows."
+            ],
+            "scope": [
+                  "Plugin design and implementation.",
+                  "Instrumentation approach.",
+                  "Profiling workflow."
+            ],
+            "score": [
+                  0,
+                  1,
+                  1,
+                  0,
+                  1,
+                  "2019 - 2021"
+            ]
+      },
+      {
+            "lane": "Cross-period — OSS / Performance / Infrastructure",
+            "title": "WebTorrent / P2P Contributions",
+            "year": "OSS",
+            "role": "Contributor",
+            "size": "medium",
+            "badge": "P2P OSS contributions",
+            "tags": [
+                  "primary",
+                  "browser",
+                  "oss"
+            ],
+            "tech": [
+                  "WebTorrent",
+                  "BitTorrent DHT",
+                  "Node.js",
+                  "P2P"
+            ],
+            "desc": "Open-source contributions across peerflix, torrent-stream, WebTorrent and bittorrent-dht ecosystem.",
+            "preview": "",
+            "links": [
+                  [
+                        "peerflix PR",
+                        "https://github.com/mafintosh/peerflix/pull/37"
+                  ],
+                  [
+                        "torrent-stream PR",
+                        "https://github.com/mafintosh/torrent-stream/pull/5"
+                  ],
+                  [
+                        "webtorrent PR",
+                        "https://github.com/webtorrent/webtorrent/pull/382"
+                  ],
+                  [
+                        "bittorrent-dht PR",
+                        "https://github.com/webtorrent/bittorrent-dht/pull/43"
+                  ]
+            ],
+            "facts": [
+                  "Contributed targeted fixes across peerflix, torrent-stream, WebTorrent and bittorrent-dht ecosystem.",
+                  "Worked inside established Node.js/P2P codebases.",
+                  "Debugged networking/P2P behavior in public open-source projects."
+            ],
+            "scope": [
+                  "Targeted fixes/contributions.",
+                  "Integration with existing OSS project constraints.",
+                  "Node.js/P2P debugging."
+            ],
+            "score": [
+                  0,
+                  1,
+                  1,
+                  1,
+                  1,
+                  "2013 - 2015"
+            ]
+      },
+      {
+            "lane": "Cross-period — Browser Automation / Testing",
+            "title": "Automation / Browser Testing",
+            "year": "2019 - 2021, Nov 2023, 2026",
+            "role": "Automation / Tooling",
+            "size": "medium",
+            "badge": "Browser automation",
+            "tags": [
+                  "primary",
+                  "browser",
+                  "oss"
+            ],
+            "tech": [
+                  "Puppeteer",
+                  "WebDriver",
+                  "Playwright",
+                  "CI",
+                  "browser automation"
+            ],
+            "desc": "Automation and testing experience around browser UI and complex frontend workflows.",
+            "preview": "",
+            "links": [],
+            "facts": [
+                  "Built browser workflow automation with Puppeteer, WebDriver, Playwright and CI.",
+                  "Used automated checks for Electron/browser UI flows and rendering regressions.",
+                  "Applied automation across production browser work, contract prototype work and 2026 R&D prototypes."
+            ],
+            "scope": [
+                  "Automation approach.",
+                  "Browser workflow testing.",
+                  "Performance/regression debugging support."
+            ],
+            "score": [
+                  0,
+                  1,
+                  1,
+                  0,
+                  1,
+                  "2019-2021, Nov 2023, 2026"
+            ]
+      }
+];
+
+    const lanesEl = document.getElementById("lanes");
+    const popover = document.getElementById("casePopover");
+    const modalMedia = document.getElementById("modalMedia");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalMeta = document.getElementById("modalMeta");
+    const modalFacts = document.getElementById("modalFacts");
+    const modalScope = document.getElementById("modalScope");
+    const modalTags = document.getElementById("modalTags");
+    const modalLinks = document.getElementById("modalLinks");
+    const closeDialog = document.getElementById("closeDialog");
+
+    const grouped = projects.reduce((acc, p) => {
+      acc[p.lane] ||= [];
+      acc[p.lane].push(p);
+      return acc;
+    }, {});
+
+    function gifFromPreview(src) {
+      if (!src || !/\.(mp4|mov|webm)([?#].*)?$/i.test(src)) return "";
+      if (src.includes("/cv-media/")) {
+        return src.replace(/\/cv-media\/([^?#]+?)\.(mp4|mov|webm)([?#].*)?$/i, "/cv-media/gifs/$1.gif$3");
+      }
+      return src.replace(/\.(mp4|mov|webm)([?#].*)?$/i, ".gif$2");
+    }
+
+    function createCard(project, index) {
+      const card = document.createElement("article");
+      card.className = `card ${project.size || ""}`;
+      card.dataset.tags = project.tags.join(" ");
+      card.dataset.index = index;
+      card.tabIndex = 0;
+
+      const gif = project.gif || gifFromPreview(project.preview);
+      const video = project.preview
+        ? `<video class="preview-video" muted loop playsinline preload="metadata" src="${project.preview}"></video>`
+        : `<div class="preview-video"></div>`;
+      const gifImg = gif
+        ? `<img class="preview-gif" loading="lazy" src="${gif}" alt="${project.title} preview" onerror="this.classList.add('broken'); this.closest('.card')?.classList.remove('has-gif');" />`
+        : "";
+      if (gif) card.classList.add("has-gif");
+
+      card.innerHTML = `
+        <div class="media">
+          ${video}
+          ${gifImg}
+          <div class="still">
+            <div class="still-title">${project.title}</div>
+          </div>
+          <div class="media-badges">
+            <span class="badge">${project.role}</span>
+            <span class="badge light">${project.year}</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="meta">
+            <span>${project.year}</span>
+            <span>${project.role}</span>
+          </div>
+          <div class="title-row">
+            <div class="project-title">${project.title}</div>
+            <div class="project-badge">${project.badge}</div>
+          </div>
+          <div class="desc">${project.desc}</div>
+          <div class="tags">
+            <span class="tag role-scope">${project.role}</span>
+            ${project.tech.slice(0, 5).map(t => `<span class="tag">${t}</span>`).join("")}
+          </div>
+          <button class="open-btn">open</button>
+        </div>
+      `;
+
+      const preview = card.querySelector("video.preview-video");
+      if (preview) {
+        card.classList.add("video-ready");
+        card.addEventListener("mouseenter", () => {
+          preview.play().then(() => preview.classList.add("playing")).catch(() => {});
+        });
+        card.addEventListener("mouseleave", () => {
+          preview.pause();
+          preview.classList.remove("playing");
+          preview.currentTime = 0;
+        });
+      }
+
+      card.addEventListener("click", (event) => {
+        if (event.target.closest("a")) return;
+        openProject(project, card);
+      });
+      card.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openProject(project, card);
+        }
+      });
+
+      return card;
+    }
+
+    Object.entries(grouped).forEach(([laneName, laneProjects]) => {
+      const first = laneProjects[0];
+      const lane = document.createElement("section");
+      lane.className = "lane";
+      lane.innerHTML = `
+        <header class="lane-head">
+          <div class="lane-year">${laneName.split(" — ")[0]}</div>
+          <div class="lane-title">${laneName.split(" — ")[1] || laneName}</div>
+          <div class="lane-note">${first.laneNote || ""}</div>
+        </header>
+        <div class="grid"></div>
+      `;
+      const grid = lane.querySelector(".grid");
+      laneProjects.forEach(p => grid.appendChild(createCard(p, projects.indexOf(p))));
+      lanesEl.appendChild(lane);
+    });
+
+    document.addEventListener("click", (event) => {
+      const trigger = event.target.closest(".timeline-link, .inline-project-link");
+      if (!trigger) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const project = projects.find(p => p.title === trigger.dataset.project);
+      if (project) openProject(project, trigger);
+    });
+
+    function closePopover() {
+      modalMedia.querySelectorAll("video").forEach(v => v.pause());
+      popover.classList.add("hidden");
+    }
+
+    function positionPopover(anchorCard) {
+      const rect = anchorCard.getBoundingClientRect();
+      const pageX = window.scrollX;
+      const pageY = window.scrollY;
+      const viewportWidth = document.documentElement.clientWidth;
+
+      const popoverWidth = Math.min(1180, viewportWidth - 28);
+      const left = Math.max(14, Math.min(pageX + rect.left, pageX + viewportWidth - popoverWidth - 14));
+      const top = pageY + rect.top + 18;
+
+      popover.style.left = `${left}px`;
+      popover.style.top = `${top}px`;
+      popover.style.width = `${popoverWidth}px`;
+    }
+
+    function openProject(project, anchorCard) {
+      modalTitle.textContent = project.title;
+      modalMeta.textContent = `${project.year} · ${project.role} · ${project.badge}`;
+
+      modalFacts.innerHTML = project.facts.map(x => `<li>${x}</li>`).join("");
+      modalScope.innerHTML = project.scope.map(x => `<li>${x}</li>`).join("");
+      modalTags.innerHTML = project.tech.map(x => `<span class="tag">${x}</span>`).join("");
+
+      modalLinks.innerHTML = project.links.length
+        ? project.links.map(([label, href]) => `<a href="${href}" target="_blank" rel="noreferrer">${label}: ${href}</a>`).join("")
+        : `<span style="color: var(--muted)">No public link attached.</span>`;
+
+      const videos = project.videos || (project.preview ? [[project.title, project.preview]] : []);
+      if (videos.length) {
+        modalMedia.innerHTML = videos.map(([label, src], index) => `
+          <div class="video-stack-label">${label}</div>
+          <video controls ${index === 0 ? "autoplay" : ""} playsinline src="${src}"></video>
+        `).join("");
+      } else {
+        modalMedia.innerHTML = `
+          <div class="modal-fallback">
+            <div>
+              <div style="font-family: var(--serif); font-size: 44px; letter-spacing: -.04em; margin-bottom: 10px;">${project.title}</div>
+              <div>No video attached yet. Use this slot for PNG + GIF/MP4 preview.</div>
+            </div>
+          </div>
+        `;
+      }
+
+      positionPopover(anchorCard);
+      popover.classList.remove("hidden");
+      popover.scrollIntoView({ block: "nearest", inline: "nearest" });
+    }
+
+    closeDialog.addEventListener("click", closePopover);
+
+    document.addEventListener("click", (event) => {
+      if (popover.classList.contains("hidden")) return;
+      const clickedInsidePopover = popover.contains(event.target);
+      const clickedTrigger = event.target.closest(".card, .timeline-link, .inline-project-link");
+      if (!clickedInsidePopover && !clickedTrigger) closePopover();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !popover.classList.contains("hidden")) {
+        closePopover();
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      if (!popover.classList.contains("hidden")) closePopover();
+    });
+
+    document.querySelectorAll(".chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        const filter = chip.dataset.filter;
+        document.querySelectorAll(".card").forEach(card => {
+          const tags = card.dataset.tags.split(" ");
+          const show = filter === "all" || tags.includes(filter);
+          card.classList.toggle("hidden", !show);
+        });
+      });
+    });
+
+    const matrix = document.getElementById("capabilityMatrix");
+    projects
+      .filter(p => ["Minicut Video Editor", "Weather App / DKT Runtime", "DKT Meta Graph Visualization", "Linkkraft R&D / Browser + Trails", "Canvas Browser Prototype", "Ambition Prototype", "ML Editor on VS Code Fork", "Linkkraft — Offline-first Browser", "Sidekick Browser", "Motion Tailor Frontend", "Trucker Path Truckloads UI", "Moscow Marathon Visualization", "Memory Profiling Babel Plugin", "WebTorrent / P2P Contributions"].includes(p.title))
+      .forEach(p => {
+        const row = document.createElement("tr");
+        const dot = v => `<span class="dot ${v ? "" : "empty"}"></span>`;
+        row.innerHTML = `
+          <td><button class="inline-project-link" data-project="${p.title}">${p.title}</button></td>
+          <td>${dot(p.score[0])}</td>
+          <td>${dot(p.score[1])}</td>
+          <td>${dot(p.score[2])}</td>
+          <td>${dot(p.score[3])}</td>
+          <td>${dot(p.score[4])}</td>
+          <td>${p.score[5]}</td>
+        `;
+        matrix.appendChild(row);
+      });
+  </script>
+</body>
+</html>
